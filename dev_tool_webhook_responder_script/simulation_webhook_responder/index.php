@@ -25,26 +25,20 @@ $logger->pushHandler($syslogHandler);
 // Use the new logger
 $logger->addInfo(serialize($message));
 
-$log = new Logger('name');
+/* $log = new Logger('name');
 $log->pushHandler(new StreamHandler('C:\wamp64\www\simulation_no_auth\log.txt', Logger::INFO));
-$log->info($message);
+$log->info($message); */
 
 $data=array('grant_type' => 'client_credentials' , "client_id" => $client_id , "client_secret" => $client_secret);
 
 $webhook_notification_data = json_decode($message);
-
-
-/* if ( count($webhook_notification_data) ==0 ) {
-    http_response_code(500);
-    die();
-} */
 
 $task = $webhook_notification_data->data->task;
 //$logger->addInfo(" Task ".$task);
 
 $object_variables = get_object_vars($webhook_notification_data->data);
 
-// $logger->addInfo(" Object variables ".serialize($object_variables));
+//$logger->addInfo(" Object variables ".serialize($object_variables));
 
 $request_variables = array();
 foreach ($object_variables as $key=>$val ) {
@@ -185,7 +179,39 @@ function build_webhook_query_string( $task , $parameters ) {
         case 'property_saved':
 				$query_string .="/".$parameters['property_uid']."/".$task;
 			break;
-          
+        case 'property_settings_updated':
+				$query_string .="/".$parameters['property_uid']."/".$task;
+			break;
+        case 'property_unpublished':
+				$query_string .="/".$parameters['property_uid']."/".$task;
+			break;
+        case 'review_deleted':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['review_uid'];
+			break;
+        case 'review_published':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['review_uid'];
+			break;
+        case 'review_saved':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['review_uid'];
+			break;
+        case 'review_unpublished':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['review_uid'];
+			break;
+        case 'room_added':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['room_uid'];
+			break;
+        case 'room_deleted':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['room_uid'];
+			break;   
+        case 'room_updated':
+				$query_string .="/".$parameters['property_uid']."/".$task."/".$parameters['room_uid'];
+			break; 
+        case 'rooms_multiple_added':
+				$query_string .="/".$parameters['property_uid']."/".$task;
+			break;
+        case 'tariffs_updated':
+				$query_string .="/".$parameters['property_uid']."/".$task;
+			break;
             
 		default :
 			break;
